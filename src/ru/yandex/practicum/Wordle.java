@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class Wordle {
 
     public static void main(String[] args) {
+
         PrintWriter logger = null;
 
         try {
@@ -76,4 +77,5 @@ public class Wordle {
             }
         }
     }
+
 }
