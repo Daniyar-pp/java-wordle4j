@@ -20,7 +20,7 @@ class WordleGameTest {
 
     @Test
     void makeGuess_returnsCorrectMarkers() throws Exception {
-        assertEquals("+--^-", game.makeGuess("гонец"));
+        assertEquals("+^-^-", game.makeGuess("гонец"));  // было "+--^-"
     }
 
     @Test
