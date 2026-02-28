@@ -44,7 +44,6 @@ public class WordleGame {
                     break;
                 }
             }
-
             result[i] = found ? '^' : '-';
         }
 

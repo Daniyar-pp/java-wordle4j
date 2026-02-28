@@ -71,8 +71,7 @@ public class Wordle {
                 }
             }
 
-            if (!game.isWin() && !game.isGameOver()) {
-            } else if (game.isGameOver() && !game.isWin()) {
+            if (game.isGameOver() && !game.isWin()) {
                 System.out.println("Игра окончена. Загаданное слово: " + game.getAnswer());
             }
 
