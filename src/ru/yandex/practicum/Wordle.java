@@ -18,7 +18,7 @@ public class Wordle {
             logger.println("- Новая игра -");
 
             WordleDictionaryLoader loader = new WordleDictionaryLoader();
-            List<String> words = loader.loadDictionary("C:\\Users\\pp\\java-wordle4j\\words_ru.txt");
+            List<String> words = loader.loadDictionary("words_ru.txt");
             WordleDictionary dictionary = new WordleDictionary(words);
 
             String secret = dictionary.getRandomWord();
@@ -28,33 +28,52 @@ public class Wordle {
 
             Scanner console = new Scanner(System.in);
             System.out.println("Игра Wordle. Угадайте слово из 5 букв.");
-            System.out.println("Пустая строка - подсказка");
+            System.out.println("Команды: 'стоп' - выход, Enter - подсказка");
+
+            int hintsLeft = 5;
 
             while (!game.isGameOver()) {
                 System.out.print("Введите слово: ");
-                String input = console.nextLine().trim();
+                String input = console.nextLine().trim().toLowerCase();
 
-                if (input.isEmpty()) {
-                    String hint = game.getHint();
-                    System.out.println("Подсказка: " + hint);
-                    logger.println("Подсказка: " + hint);
+                if (input.equals("стоп")) {
+                    System.out.println("Игра прервана");
+                    break;
+                }
+
+                if (input.isEmpty() || input.equals("подсказка")) {
+                    if (hintsLeft > 0) {
+                        String hint = game.getHint();
+                        hintsLeft--;
+                        System.out.println("Подсказка: " + hint);
+                        System.out.println("Осталось подсказок: " + hintsLeft);
+                    } else {
+                        System.out.println("Подсказки кончились!");
+                    }
                     continue;
                 }
 
-                try {
-                    String result = game.makeGuess(input);
-
-                    if (result == null) {
-                        System.out.println("Слово должно быть из 5 букв");
-                    } else {
-                        System.out.println("Результат: " + result);
-                        logger.println("Ход: " + input + " -> " + result);
-                    }
-
-                } catch (WordleGame.WordNotFoundInDictionary e) {
-                    System.out.println("Такого слова нет в словаре");
-                    logger.println("Ошибка: " + e.getMessage());
+                if (input.length() != 5) {
+                    System.out.println("Ошибка! Нужно 5 букв, а вы ввели " + input.length());
+                    continue;
                 }
+
+                String result = game.makeGuess(input);
+
+                if (result == null) {
+                    System.out.println("Такого слова нет в словаре!");
+                } else {
+                    System.out.println("Результат: " + result);
+
+                    if (game.isWin()) {
+                        System.out.println("ПОБЕДА! Вы угадали слово!");
+                    }
+                }
+            }
+
+            if (!game.isWin() && !game.isGameOver()) {
+            } else if (game.isGameOver() && !game.isWin()) {
+                System.out.println("Игра окончена. Загаданное слово: " + game.getAnswer());
             }
 
             if (game.isWin()) {

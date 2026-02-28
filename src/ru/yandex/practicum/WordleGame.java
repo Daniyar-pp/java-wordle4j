@@ -4,12 +4,6 @@ import java.util.*;
 
 public class WordleGame {
 
-    public static class WordNotFoundInDictionary extends Exception {
-        public WordNotFoundInDictionary(String message) {
-            super(message);
-        }
-    }
-
     private final String answer;
     private final WordleDictionary dictionary;
     private int steps;
@@ -25,7 +19,6 @@ public class WordleGame {
     }
 
     public String analyzeGuess(String word) {
-        word = word.toLowerCase().replace('ё', 'е');
         char[] answerChars = answer.toCharArray();
         char[] guessChars = word.toCharArray();
         boolean[] used = new boolean[5];
@@ -58,7 +51,6 @@ public class WordleGame {
         return new String(result);
     }
 
-
     public String getHint() {
         if (guesses.isEmpty()) {
             return dictionary.getRandomWord();
@@ -72,7 +64,7 @@ public class WordleGame {
         return dictionary.getRandomWord();
     }
 
-    public String makeGuess(String guess) throws WordNotFoundInDictionary {
+    public String makeGuess(String guess) {
         String normalized = guess.toLowerCase().replace('ё', 'е');
 
         if (normalized.length() != 5) {
@@ -80,7 +72,7 @@ public class WordleGame {
         }
 
         if (!dictionary.contains(normalized)) {
-            throw new WordNotFoundInDictionary("Слово не найдено: " + guess);
+            return null;
         }
 
         String hint = analyzeGuess(normalized);
@@ -92,11 +84,11 @@ public class WordleGame {
     }
 
     public boolean isGameOver() {
-        return steps >= 6 || (guesses.size() > 0 && guesses.get(guesses.size() - 1).equals(answer));
+        return steps >= 6 || (!guesses.isEmpty() && guesses.get(guesses.size() - 1).equals(answer));
     }
 
     public boolean isWin() {
-        return guesses.size() > 0 && guesses.get(guesses.size() - 1).equals(answer);
+        return !guesses.isEmpty() && guesses.get(guesses.size() - 1).equals(answer);
     }
 
     public String getAnswer() {

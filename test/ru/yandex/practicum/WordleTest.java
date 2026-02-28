@@ -3,8 +3,6 @@ package ru.yandex.practicum;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.Arrays;
 
 class WordleGameTest {
@@ -19,44 +17,43 @@ class WordleGameTest {
     }
 
     @Test
-    void makeGuess_returnsCorrectMarkers() throws Exception {
-        assertEquals("+^-^-", game.makeGuess("гонец"));  // было "+--^-"
+    void makeGuess_returnsCorrectMarkers() {
+        assertEquals("+^-^-", game.makeGuess("гонец"));
     }
 
     @Test
-    void makeGuess_withCorrectWord_returnsAllPlus() throws Exception {
+    void makeGuess_withCorrectWord_returnsAllPlus() {
         assertEquals("+++++", game.makeGuess("герой"));
     }
 
     @Test
-    void makeGuess_updatesGuessesList() throws Exception {
+    void makeGuess_updatesGuessesList() {
         game.makeGuess("гонец");
         assertEquals(1, game.getGuesses().size());
         assertEquals("гонец", game.getGuesses().get(0));
     }
 
     @Test
-    void makeGuess_withInvalidLength_returnsNull() throws Exception {
+    void makeGuess_withInvalidLength_returnsNull() {
         assertNull(game.makeGuess("дом"));
         assertEquals(0, game.getGuesses().size());
     }
 
     @Test
-    void makeGuess_withWordNotInDictionary_throwsException() {
-        assertThrows(WordleGame.WordNotFoundInDictionary.class, () -> {
-            game.makeGuess("абвгд");
-        });
+    void makeGuess_withWordNotInDictionary_returnsNull() {
+        assertNull(game.makeGuess("абвгд"));
+        assertEquals(0, game.getGuesses().size());
     }
 
     @Test
-    void gameWins_whenCorrectWordGuessed() throws Exception {
+    void gameWins_whenCorrectWordGuessed() {
         game.makeGuess("герой");
         assertTrue(game.isWin());
         assertTrue(game.isGameOver());
     }
 
     @Test
-    void gameContinues_afterWrongGuess() throws Exception {
+    void gameContinues_afterWrongGuess() {
         game.makeGuess("гонец");
         assertFalse(game.isWin());
         assertFalse(game.isGameOver());
